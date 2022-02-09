@@ -311,6 +311,11 @@
                     }
                 }
 
+                // Let's check whether the result is calculable
+                if (this.newValue[this.newValue.length - 1] == '+' || this.newValue[this.newValue.length - 1] == '-' || this.newValue[this.newValue.length - 1] == '*' || this.newValue[this.newValue.length - 1] == '/') {
+                    this.isThisValid = false;
+                }
+
                 if (this.isThisValid) {
                     this.display.value = eval(this.newValue);
                     this.Ans = eval(this.newValue);
