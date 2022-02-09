@@ -22,13 +22,20 @@
         }
 
         header {
-            display: flex;
-            height: 2rem;
+            text-align: center;
+            padding: 5px;
             background-color: darkslategray;
         }
 
         .logo {
             font-weight: bold;
+            font-size: 2rem;
+            color: wheat;
+        }
+
+        .subLogo {
+            font-weight: bold;
+            font-size: 0.8rem;
             color: wheat;
         }
 
@@ -62,11 +69,21 @@
         .btn {
             width: 3rem;
         }
+
+        @media only screen and (max-width:1200px) {
+            .box {
+                width: 80%;
+            }
+        }
     </style>
 </head>
 
 <body>
-    <header><span class="logo">Scientific Calculator</span> </header>
+    <header>
+        <span class="logo">Scientific Calculator</span>
+        <br>
+        <span class="subLogo">by Henrique Matheus da Silva Lima</span>
+    </header>
 
     <br><br>
 
@@ -75,6 +92,29 @@
             <table class="calculatorTable">
                 <tr>
                     <input type="text" class="display">
+                </tr>
+                <tr style="height: 1rem;">
+                    <!-- Just a space-->
+                </tr>
+                <tr>
+                    <td>
+                        <button class="btn btnLog">log</button>
+                    </td>
+                    <td>
+                        <button class="btn btnLn">ln</button>
+                    </td>
+                    <td>
+                        <button class="btn btnNum">^</button>
+                    </td>
+                    <td>
+                        <button class="btn btnNum">(</button>
+                    </td>
+                    <td>
+                        <button class="btn btnNum">)</button>
+                    </td>
+                </tr>
+                <tr style="height: 0.3rem;">
+                    <!-- Just a space-->
                 </tr>
                 <tr>
                     <td>
@@ -87,7 +127,7 @@
                         <button class="btn btnNum">9</button>
                     </td>
                     <td>
-                        <button class="btn">DEL</button>
+                        <button class="btn btnDel">DEL</button>
                     </td>
                     <td>
                         <button class="btn btnAc">AC</button>
@@ -135,10 +175,10 @@
                         <button class="btn btnNum">.</button>
                     </td>
                     <td>
-                        <button class="btn">EXP</button>
+
                     </td>
                     <td>
-                        <button class="btn">Ans</button>
+                        <button class="btn btnAns">Ans</button>
                     </td>
                     <td>
                         <button class="btn btnCalculate">=</button>
@@ -151,52 +191,134 @@
     </div>
     <script>
         class Calculator {
-            constructor () {
+            constructor() {
                 this.display = document.querySelector('.display');
+                this.Ans = '';
             }
 
-            calculate () {
+            calculate() {
                 this.initialValue = this.display.value.split('');
                 this.initialValueError = this.display.value;
                 this.newValue = '';
                 this.isThisValid = true;
+
                 for (let counter = 0; counter < this.initialValue.length; counter++) {
                     if (this.initialValue[counter] == '0' || this.initialValue[counter] == '1' || this.initialValue[counter] == '2' || this.initialValue[counter] == '3' || this.initialValue[counter] == '4' || this.initialValue[counter] == '5' || this.initialValue[counter] == '6' || this.initialValue[counter] == '7' || this.initialValue[counter] == '8' || this.initialValue[counter] == '9') {
                         this.newValue += this.initialValue[counter];
                     }
+                    else if (this.initialValue[counter] == '.') {
+                        this.newValue += '.';
+                        if ((this.initialValue[counter + 1] == '+' || this.initialValue[counter + 1] == '-' || this.initialValue[counter + 1] == '×' || this.initialValue[counter + 1] == '÷' || this.initialValue[counter + 1] == '*' || this.initialValue[counter + 1] == '/' || this.initialValue[counter + 1] == '.') || (counter == 0 || counter == this.initialValue.length - 1)) {
+                            this.isThisValid = false;
+                        }
+                    }
                     else if (this.initialValue[counter] == '+') {
                         this.newValue += '+';
-                        if ((this.initialValue[counter + 1] == '+' || this.initialValue[counter + 1] == '-' || this.initialValue[counter + 1] == '×' || this.initialValue[counter + 1] == '÷') || counter == 0) {
+                        if ((this.initialValue[counter + 1] == '×' || this.initialValue[counter + 1] == '÷' || this.initialValue[counter + 1] == '*' || this.initialValue[counter + 1] == '/' || this.initialValue[counter + 1] == '.') || (counter == 0 || counter == this.initialValue.length - 1)) {
                             this.isThisValid = false;
+                        }
+                        if (this.initialValue[counter + 1] == '+') {
+                            counter++;
                         }
                     }
                     else if (this.initialValue[counter] == '-') {
                         this.newValue += '-';
-                        if ((this.initialValue[counter + 1] == '+' || this.initialValue[counter + 1] == '-' || this.initialValue[counter + 1] == '×' || this.initialValue[counter + 1] == '÷') || counter == 0) {
+                        if ((this.initialValue[counter + 1] == '×' || this.initialValue[counter + 1] == '÷' || this.initialValue[counter + 1] == '*' || this.initialValue[counter + 1] == '/' || this.initialValue[counter + 1] == '.') || (counter == 0 || counter == this.initialValue.length - 1)) {
                             this.isThisValid = false;
+                        }
+                        if (this.initialValue[counter + 1] == '-') {
+                            counter++;
                         }
                     }
                     else if (this.initialValue[counter] == '×') {
                         this.newValue += '*';
-                        if ((this.initialValue[counter + 1] == '+' || this.initialValue[counter + 1] == '-' || this.initialValue[counter + 1] == '×' || this.initialValue[counter + 1] == '÷') || counter == 0) {
+                        if ((this.initialValue[counter + 1] == '×' || this.initialValue[counter + 1] == '÷' || this.initialValue[counter + 1] == '*' || this.initialValue[counter + 1] == '/' || this.initialValue[counter + 1] == '.') || (counter == 0 || counter == this.initialValue.length - 1)) {
                             this.isThisValid = false;
                         }
                     }
-                    else if (this.initialValue[counter] == '÷') {
-                        this.newValue += '/';
-                        if ((this.initialValue[counter + 1] == '+' || this.initialValue[counter + 1] == '-' || this.initialValue[counter + 1] == '×' || this.initialValue[counter + 1] == '÷') || counter == 0) {
+                    else if (this.initialValue[counter] == '*') {
+                        this.newValue += '*';
+                        if ((this.initialValue[counter + 1] == '×' || this.initialValue[counter + 1] == '÷' || this.initialValue[counter + 1] == '/' || this.initialValue[counter + 1] == '.') || (this.initialValue[counter + 1] == '*' && this.initialValue[counter + 2] == '*') || (counter == 0 || counter == this.initialValue.length - 1)) {
                             this.isThisValid = false;
                         }
+                    }
+                    else if (this.initialValue[counter] == '^') {
+                        this.newValue += '*';
+                        this.newValue += '*';
+                        if ((this.initialValue[counter + 1] == '×' || this.initialValue[counter + 1] == '÷' || this.initialValue[counter + 2] == '*' || this.initialValue[counter + 1] == '/' || this.initialValue[counter + 1] == '.') || (counter == 0 || counter == this.initialValue.length - 1)) {
+                            this.isThisValid = false;
+                        }
+                    }
+                    else if (this.initialValue[counter] == '÷' || this.initialValue[counter] == '/') {
+                        this.newValue += '/';
+                        if ((this.initialValue[counter + 1] == '×' || this.initialValue[counter + 1] == '÷' || this.initialValue[counter + 1] == '*' || this.initialValue[counter + 1] == '/' || this.initialValue[counter + 1] == '.') || (counter == 0 || counter == this.initialValue.length - 1)) {
+                            this.isThisValid = false;
+                        }
+                    }
+                    else if (this.initialValue[counter] == 'A' && this.initialValue[counter + 1] == 'n' && this.initialValue[counter + 2] == 's' && counter == 0 && this.initialValue.length == 3) {
+                        this.newValue += this.Ans;
+                        counter = counter + 2;
+
+                        if (this.Ans === '') this.isThisValid = false;
+                    }
+                    else if (this.initialValue[counter] == 'A' && this.initialValue[counter + 1] == 'n' && this.initialValue[counter + 2] == 's') {
+
+                        this.newValue += this.Ans;
+                        counter = counter + 2;
+                        if (this.Ans === '') this.isThisValid = false;
+                        if ((this.initialValue[counter + 1] != '+' && this.initialValue[counter + 1] != '-' && this.initialValue[counter + 1] != '×' && this.initialValue[counter + 1] != '÷' && this.initialValue[counter + 1] != '*' && this.initialValue[counter + 1] != '/')) {
+                            this.isThisValid = false;
+                        }
+                    }
+                    else if (this.initialValue[counter] == 'l' && this.initialValue[counter + 1] == 'o' && this.initialValue[counter + 2] == 'g' && this.initialValue[counter + 3] == '(') {
+                        this.newValue += "Math.log10(";
+
+                        if (this.initialValue[counter - 1] == '0' || this.initialValue[counter - 1] == '1' || this.initialValue[counter - 1] == '2' || this.initialValue[counter - 1] == '3' || this.initialValue[counter - 1] == '4' || this.initialValue[counter - 1] == '5' || this.initialValue[counter - 1] == '6' || this.initialValue[counter - 1] == '7' || this.initialValue[counter - 1] == '8' || this.initialValue[counter - 1] == '9') {
+                            this.isThisValid = false;
+                            console.log("número atrás");
+                        }
+                        if (this.initialValue[counter + 4] != '0' && this.initialValue[counter + 4] != '1' && this.initialValue[counter + 4] != '2' && this.initialValue[counter + 4] != '3' && this.initialValue[counter + 4] != '4' && this.initialValue[counter + 4] != '5' && this.initialValue[counter + 4] != '6' && this.initialValue[counter + 4] != '7' && this.initialValue[counter + 4] != '8' && this.initialValue[counter + 4] != '9') {
+                            this.isThisValid = false;
+                        }
+                        counter = counter + 3;
+                    }
+                    else if (this.initialValue[counter] == 'l' && this.initialValue[counter + 1] == 'n' && this.initialValue[counter + 2] == '(') {
+                        this.newValue += "Math.log(";
+
+                        if (this.initialValue[counter - 1] == '0' || this.initialValue[counter - 1] == '1' || this.initialValue[counter - 1] == '2' || this.initialValue[counter - 1] == '3' || this.initialValue[counter - 1] == '4' || this.initialValue[counter - 1] == '5' || this.initialValue[counter - 1] == '6' || this.initialValue[counter - 1] == '7' || this.initialValue[counter - 1] == '8' || this.initialValue[counter - 1] == '9') {
+                            this.isThisValid = false;
+                            console.log("número atrás");
+                        }
+                        if (this.initialValue[counter + 3] != '0' && this.initialValue[counter + 3] != '1' && this.initialValue[counter + 3] != '2' && this.initialValue[counter + 3] != '3' && this.initialValue[counter + 3] != '4' && this.initialValue[counter + 3] != '5' && this.initialValue[counter + 3] != '6' && this.initialValue[counter + 3] != '7' && this.initialValue[counter + 3] != '8' && this.initialValue[counter + 3] != '9') {
+                            this.isThisValid = false;
+                        }
+                        counter = counter + 2;
+                    }
+                    else if (this.initialValue[counter] == '(') {
+                        this.newValue += '(';
+                        if (this.initialValue[counter - 1] == ')' || this.initialValue[counter + 1] == ')') {
+                            this.isThisValid = false;
+                        }
+                    }
+                    else if (this.initialValue[counter] == ')') {
+                        this.newValue += ')';
+                        if (this.initialValue[counter - 1] == '(' || this.initialValue[counter + 1] == '(') {
+                            this.isThisValid = false;
+                        }
+                    }
+                    else {
+                        this.isThisValid = false;
                     }
                 }
 
                 if (this.isThisValid) {
                     this.display.value = eval(this.newValue);
+                    this.Ans = eval(this.newValue);
                 }
                 else {
                     this.display.value = "SYNTAX ERROR!";
 
-                    setTimeout (() => {
+                    setTimeout(() => {
                         this.display.value = this.initialValueError;
                     }, 1500);
                 }
@@ -205,22 +327,113 @@
                 console.log(this.newValue);
             }
 
-            getClicks () {
-                document.addEventListener ("click", (event) => {
+            getClicks() {
+                document.addEventListener("click", event => {
                     if (event.target.classList.contains("btnNum")) {
                         this.display.value += event.target.innerText;
+                        this.display.focus();
                     }
                     else if (event.target.classList.contains("btnAc")) {
                         this.display.value = "";
                     }
+                    else if (event.target.classList.contains("btnDel")) {
+                        this.display.value = this.display.value.slice(0, -1);
+                    }
+                    else if (event.target.classList.contains("btnAns")) {
+                        this.display.value += "Ans";
+                    }
+                    else if (event.target.classList.contains("btnLog")) {
+                        this.display.value += "log(";
+                    }
+                    else if (event.target.classList.contains("btnLn")) {
+                        this.display.value += "ln(";
+                    }
                     else if (event.target.classList.contains("btnCalculate")) {
-                        this.calculate ();
+                        this.calculate();
                     }
                 });
             }
 
-            start () {
-                this.getClicks ();
+            getKeys() {
+                document.addEventListener('keyup', event => {
+                    if (event.shiftKey && event.keyCode == 57) {
+                        if (this.display !== document.activeElement) this.display.value += '(';
+                    }
+                    else if (event.shiftKey && event.keyCode == 48) {
+                        if (this.display !== document.activeElement) this.display.value += ')';
+                    }
+                    else {
+                        switch (event.keyCode) {
+                            case 13:
+                                this.display.focus();
+                                this.calculate();
+                                break;
+                            case 46:
+                                if (this.display !== document.activeElement) this.display.value = "";
+                                break;
+                            case 8:
+                                if (this.display !== document.activeElement) this.display.value = this.display.value.slice(0, -1);
+                                break;
+                            case 96:
+                            case 48:
+                                if (this.display !== document.activeElement) this.display.value += 0;
+                                break;
+                            case 97:
+                            case 49:
+                                if (this.display !== document.activeElement) this.display.value += 1;
+                                break;
+                            case 98:
+                            case 50:
+                                if (this.display !== document.activeElement) this.display.value += 2;
+                                break;
+                            case 99:
+                            case 51:
+                                if (this.display !== document.activeElement) this.display.value += 3;
+                                break;
+                            case 100:
+                            case 52:
+                                if (this.display !== document.activeElement) this.display.value += 4;
+                                break;
+                            case 101:
+                            case 53:
+                                if (this.display !== document.activeElement) this.display.value += 5;
+                                break;
+                            case 102:
+                            case 54:
+                                if (this.display !== document.activeElement) this.display.value += 6;
+                                break;
+                            case 103:
+                            case 55:
+                                if (this.display !== document.activeElement) this.display.value += 7;
+                                break;
+                            case 104:
+                            case 56:
+                                if (this.display !== document.activeElement) this.display.value += 8;
+                                break;
+                            case 105:
+                            case 57:
+                                if (this.display !== document.activeElement) this.display.value += 9;
+                                break;
+                            case 106:
+                                if (this.display !== document.activeElement) this.display.value += '×';
+                                break;
+                            case 107:
+                                if (this.display !== document.activeElement) this.display.value += '+';
+                                break;
+                            case 109:
+                                if (this.display !== document.activeElement) this.display.value += '-';
+                                break;
+                            case 111:
+                                if (this.display !== document.activeElement) this.display.value += '÷';
+                                break;
+                        }
+                    }
+                });
+            }
+
+            start() {
+                this.getKeys();
+                this.getClicks();
             }
         }
 
