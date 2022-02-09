@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scientific Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: darkolivegreen;
+        }
+
+        header {
+            display: flex;
+            height: 2rem;
+            background-color: darkslategray;
+        }
+
+        .logo {
+            font-weight: bold;
+            color: wheat;
+        }
+
+        .box {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .calculatorBody {
+            max-width: 800px;
+            margin: auto;
+            padding: 1rem;
+            border-radius: 25px;
+            background-color: dimgray;
+        }
+
+        .display {
+            display: block;
+            margin: auto;
+            width: 15rem;
+        }
+
+        .calculatorTable {
+            margin: auto;
+        }
+
+        .buttonArea {
+            width: 80%;
+        }
+
+        .btn {
+            width: 3rem;
+        }
+    </style>
+</head>
+
+<body>
+    <header><span class="logo">Scientific Calculator</span> </header>
+
+    <br><br>
+
+    <div class="box">
+        <div class="calculatorBody">
+            <table class="calculatorTable">
+                <tr>
+                    <input type="text" class="display">
+                </tr>
+                <tr>
+                    <td>
+                        <button class="btn btnNum">7</button>
+                    </td>
+                    <td>
+                        <button class="btn btnNum">8</button>
+                    </td>
+                    <td>
+                        <button class="btn btnNum">9</button>
+                    </td>
+                    <td>
+                        <button class="btn">DEL</button>
+                    </td>
+                    <td>
+                        <button class="btn btnAc">AC</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button class="btn btnNum">4</button>
+                    </td>
+                    <td>
+                        <button class="btn btnNum">5</button>
+                    </td>
+                    <td>
+                        <button class="btn btnNum">6</button>
+                    </td>
+                    <td>
+                        <button class="btn btnNum">×</button>
+                    </td>
+                    <td>
+                        <button class="btn btnNum">÷</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button class="btn btnNum">1</button>
+                    </td>
+                    <td>
+                        <button class="btn btnNum">2</button>
+                    </td>
+                    <td>
+                        <button class="btn btnNum">3</button>
+                    </td>
+                    <td>
+                        <button class="btn btnNum">+</button>
+                    </td>
+                    <td>
+                        <button class="btn btnNum">-</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button class="btn btnNum">0</button>
+                    </td>
+                    <td>
+                        <button class="btn btnNum">.</button>
+                    </td>
+                    <td>
+                        <button class="btn">EXP</button>
+                    </td>
+                    <td>
+                        <button class="btn">Ans</button>
+                    </td>
+                    <td>
+                        <button class="btn btnCalculate">=</button>
+                    </td>
+                </tr>
+
+            </table>
+
+        </div>
+    </div>
+    <script>
+        class Calculator {
+            constructor () {
+                this.display = document.querySelector('.display');
+            }
+
+            calculate () {
+                this.initialValue = this.display.value.split('');
+                this.initialValueError = this.display.value;
+                this.newValue = '';
+                this.isThisValid = true;
+                for (let counter = 0; counter < this.initialValue.length; counter++) {
+                    if (this.initialValue[counter] == '0' || this.initialValue[counter] == '1' || this.initialValue[counter] == '2' || this.initialValue[counter] == '3' || this.initialValue[counter] == '4' || this.initialValue[counter] == '5' || this.initialValue[counter] == '6' || this.initialValue[counter] == '7' || this.initialValue[counter] == '8' || this.initialValue[counter] == '9') {
+                        this.newValue += this.initialValue[counter];
+                    }
+                    else if (this.initialValue[counter] == '+') {
+                        this.newValue += '+';
+                        if ((this.initialValue[counter + 1] == '+' || this.initialValue[counter + 1] == '-' || this.initialValue[counter + 1] == '×' || this.initialValue[counter + 1] == '÷') || counter == 0) {
+                            this.isThisValid = false;
+                        }
+                    }
+                    else if (this.initialValue[counter] == '-') {
+                        this.newValue += '-';
+                        if ((this.initialValue[counter + 1] == '+' || this.initialValue[counter + 1] == '-' || this.initialValue[counter + 1] == '×' || this.initialValue[counter + 1] == '÷') || counter == 0) {
+                            this.isThisValid = false;
+                        }
+                    }
+                    else if (this.initialValue[counter] == '×') {
+                        this.newValue += '*';
+                        if ((this.initialValue[counter + 1] == '+' || this.initialValue[counter + 1] == '-' || this.initialValue[counter + 1] == '×' || this.initialValue[counter + 1] == '÷') || counter == 0) {
+                            this.isThisValid = false;
+                        }
+                    }
+                    else if (this.initialValue[counter] == '÷') {
+                        this.newValue += '/';
+                        if ((this.initialValue[counter + 1] == '+' || this.initialValue[counter + 1] == '-' || this.initialValue[counter + 1] == '×' || this.initialValue[counter + 1] == '÷') || counter == 0) {
+                            this.isThisValid = false;
+                        }
+                    }
+                }
+
+                if (this.isThisValid) {
+                    this.display.value = eval(this.newValue);
+                }
+                else {
+                    this.display.value = "SYNTAX ERROR!";
+
+                    setTimeout (() => {
+                        this.display.value = this.initialValueError;
+                    }, 1500);
+                }
+
+
+                console.log(this.newValue);
+            }
+
+            getClicks () {
+                document.addEventListener ("click", (event) => {
+                    if (event.target.classList.contains("btnNum")) {
+                        this.display.value += event.target.innerText;
+                    }
+                    else if (event.target.classList.contains("btnAc")) {
+                        this.display.value = "";
+                    }
+                    else if (event.target.classList.contains("btnCalculate")) {
+                        this.calculate ();
+                    }
+                });
+            }
+
+            start () {
+                this.getClicks ();
+            }
+        }
+
+        let calculator = new Calculator();
+        calculator.start();
+    </script>
+</body>
+
+</html>
